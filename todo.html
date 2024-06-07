@@ -1,0 +1,118 @@
+<!-- lets build todo app purely with the help of javascript  -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+  </head>
+  <style>
+    *{
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    .container {
+        padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-items: center;
+      align-items: center;
+      background-color: rgb(240, 236, 231);
+      width: 500px;
+      margin: 0 auto;
+
+      height: 100vh;
+    }
+    input{
+        margin: 2.1rem 0;
+        width: 80%;
+        padding: 8px 15px;
+    }
+
+    #list {
+    
+      list-style: none;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 0;
+      width: 100%;
+      
+    }
+    li{
+        width: 100%;
+        margin-bottom: 2rem;
+      
+        justify-content: space-around;
+        align-items: center;
+        display: flex;
+        padding: 0 20px ;
+    }
+    button{
+        border: none;
+        outline: none;
+        font-size: 1.5rem;
+        background: transparent;
+        cursor: pointer;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h2>Building Todo App with purely JS</h2>
+      <input type="text" id="inputField">
+      <ul id="list"></ul>
+    </div>
+    <script>
+      const list = document.getElementById("list");
+
+      class ListBinding {
+        constructor(_element) {
+          this.element = _element;
+
+          this.todos = [];
+        }
+        createElement(text, id) {
+          
+          const li = document.createElement("li"); 
+          const p = document.createElement("p"); 
+          li.appendChild(p); 
+          p.textContent = text; 
+          const button = document.createElement("button");
+          button.textContent = "x"; 
+          button.addEventListener("click", () => {
+            this.deleteTodo(id); 
+          });
+          li.appendChild(button); 
+          return li;
+        }
+        addTodo(text) {
+          this.todos.push(text);
+          this.update();
+        }
+        deleteTodo(id) {
+          this.todos.splice(id, 1);
+          this.update();
+        }
+        update() {
+          while (this.element.firstChild) {
+            this.element.removeChild(this.element.firstChild);
+          }
+          for (let i = 0; i < this.todos.length; i++) {
+            this.element.appendChild(
+              this.createElement(this.todos[i], i)
+            );
+          }
+        }
+      }
+
+      const listBind = new ListBinding(list);
+      document.getElementById('inputField').addEventListener('blur', (e)=>{
+        if(e.target.value.trim() === '') return ;
+        listBind.addTodo(e.target.value);
+        e.target.value = '';
+      })
+
+    </script>
+  </body>
+</html>
