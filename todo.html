@@ -25,8 +25,11 @@
 
       height: 100vh;
     }
+    h3{
+        margin: 1.9rem 0;
+    }
     input{
-        margin: 2.1rem 0;
+        margin: 1.2rem 0;
         width: 80%;
         padding: 8px 15px;
     }
@@ -34,6 +37,7 @@
     #list {
     
       list-style: none;
+      
       font-weight: bold;
       font-size: 20px;
       padding: 0;
@@ -43,16 +47,21 @@
     li{
         width: 100%;
         margin-bottom: 2rem;
-      
-        justify-content: space-around;
+        text-align: center;
+        justify-content: space-evenly;
         align-items: center;
         display: flex;
         padding: 0 20px ;
     }
+    p{
+        flex: 1;
+        font-size: 1.3rem;
+    }
     button{
+        flex: 1;
         border: none;
         outline: none;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
         background: transparent;
         cursor: pointer;
     }
@@ -60,6 +69,7 @@
   <body>
     <div class="container">
       <h2>Building Todo App with purely JS</h2>
+      <h3>Add Todo item : </h3>
       <input type="text" id="inputField">
       <ul id="list"></ul>
     </div>
@@ -70,7 +80,7 @@
         constructor(_element) {
           this.element = _element;
 
-          this.todos = [];
+          this.todos =   window.localStorage.getItem('todos') ? localStorage.getItem('todos').split(',') : [];
         }
         createElement(text, id) {
           
@@ -88,16 +98,20 @@
         }
         addTodo(text) {
           this.todos.push(text);
+          window.localStorage.setItem('todos', [...this.todos]);
           this.update();
         }
         deleteTodo(id) {
           this.todos.splice(id, 1);
+          window.localStorage.setItem('todos', [...this.todos]);
           this.update();
         }
         update() {
+
           while (this.element.firstChild) {
             this.element.removeChild(this.element.firstChild);
           }
+          console.log(this.todos.length)
           for (let i = 0; i < this.todos.length; i++) {
             this.element.appendChild(
               this.createElement(this.todos[i], i)
@@ -107,6 +121,7 @@
       }
 
       const listBind = new ListBinding(list);
+      listBind.update();
       document.getElementById('inputField').addEventListener('blur', (e)=>{
         if(e.target.value.trim() === '') return ;
         listBind.addTodo(e.target.value);
